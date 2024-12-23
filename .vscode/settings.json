@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#23311B",
+        "titleBar.activeBackground": "#324525",
+        "titleBar.activeForeground": "#F9FBF8"
+    },
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "param-type-mismatch"
+    ]
+}
