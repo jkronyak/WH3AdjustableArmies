@@ -15,3 +15,8 @@ option_army_size:set_tooltip_text("Warning: Changing this setting for an on-goin
 option_army_size:slider_set_min_max(20, 40)
 option_army_size:slider_set_step_size(1)
 option_army_size:set_default_value(40)
+
+local option_refresh_on_anc_gained = mct_mod:add_new_option("refresh_on_anc_gained", "checkbox")
+option_army_size:set_text("Auto Refresh Army")
+option_army_size:set_tooltip_text("Automatically 'refreshes' an army when one of the heroes gains an ancillary.")
+option_army_size:set_default_value(true)

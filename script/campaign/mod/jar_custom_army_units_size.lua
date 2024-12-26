@@ -6,12 +6,11 @@ local custom_army_units_size = {
 }
 
 function custom_army_units_size:init()
-
+    -- 14 00 00 00 3B C1 0F 47 C1 48 83 C4 20 5B C3 B8 14 00 00 00 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC
     self.new_army_limit = self.mr.uint32(army_size)
-     -- 14 00 00 00 3B C1 0F 47 C1 48 83 C4 20 5B C3 B8 14 00 00 00 48 83 C4 20 5B C3 CC CC CC CC CC CC CC CC CC CC
     self.player_army_size_offset = 0x1F5973C
+    self.exchange_panel_ui_offset = 0x1F1AB0C
     self.ai_army_size_offset = self.player_army_size_offset + 0x10
-    self.exchange_panel_ui_offset = 0x1F1AB0C -- same signature as above, why?
     self.unknown_20_offset = self.exchange_panel_ui_offset + 0x10
 end
 
