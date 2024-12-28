@@ -400,40 +400,21 @@ core:add_listener(
     "FactionTurnStart",
     true,
     function(context)
-        -- Log("\n\tJarAdjArmiesFactionTurnStart")
         local f = context:faction()
+        Log("JarAdjArmiesFactionTurnStart", f:name())
         local mfl = f:military_force_list()
         for i = 0, mfl:num_items() - 1 do
             local cur_mf = mfl:item_at(i)
-            local cur_cqi = cur_mf:command_queue_index()
-            if cqi_attr_list[cur_cqi] then
-                Log("\n\t", f:name(), cur_mf:general_character():cqi())
-                table.remove(cqi_attr_list, cur_cqi)
-                cm:remove_effect_bundle_from_force("wh2_dlc17_bundle_immune_all_attrition", cur_mf:command_queue_index())
-            end
-        end
-    end,
-    true
-)
+            -- if(cqi_attr_list[cur_mf:command_queue_index()]) then
+                cm:remove_effect_bundle("wh2_dlc17_bundle_immune_all_attrition", cur_mf:command_queue_index())
+                table[cur_mf:command_queue_index()] = false
+            -- end
 
-core:add_listener(
-    "JarAdjArmiesFactionTurnEnd",
-    "FactionTurnEnd",
-    true,
-    function(context)
-        -- Log("\n\tJarAdjArmiesFactionTurnEnd")
-        local f = context:faction()
-        local mfl = f:military_force_list()
-        for i = 0, mfl:num_items() - 1 do
-            local cur_mf = mfl:item_at(i)
             if cur_mf:will_suffer_any_attrition() then
                 Log("\n\t", f:name(), cur_mf:general_character():cqi())
-
                 local lord = cur_mf:general_character()
                 local lord_cqi = lord:cqi()
                 table.insert(cqi_attr_list, { [lord_cqi] = true })
-
-                cm:zero_action_points(cm:char_lookup_str(lord_cqi))
 
                 Log("\n\tStarting CCO calls")
                 local cco_char = cco("CcoCampaignCharacter", lord_cqi)
@@ -441,17 +422,15 @@ core:add_listener(
                 for j = 0, mf_ctx:Call("UnitList.Size") - 1 do
                     Log("\n\tj", j)
                     local unit_cco = mf_ctx:Call("UnitList['" .. j .. "']")
-                    local attr_pct = unit_cco:Call("AttritionPercent")
-                    -- cm:apply_effect_bundle_to_force("wh2_dlc17_bundle_immune_all_attrition", cur_mf:command_queue_index(), 1)
-                    
-                    
+                    local hp_pct = unit_cco:Call("HealthPercent")
+                    local attr_pct = unit_cco:Call("AttritionPercent")                    
+                    local rplsh_pct = unit_cco:Call("HealthReplenishPercent")
+                    local id = unit_cco:Call("UniqueUiId")
+
                     Log("attr_pct", attr_pct)
                     Log("unit_cco", unit_cco)
-                    local hp_pct = unit_cco:Call("HealthPercent")
                     Log("hp_pct", hp_pct)
-                    local rplsh_pct = unit_cco:Call("HealthReplenishPercent")
                     Log("rplsh_pct", rplsh_pct)
-                    local id = unit_cco:Call("UniqueUiId")
                     Log("id", id)
 
                     for k = 0, cur_mf:unit_list():num_items() - 1 do
@@ -470,9 +449,27 @@ core:add_listener(
                         end
                     end
                 end
-                cm:apply_effect_bundle_to_force("wh2_dlc17_bundle_immune_all_attrition", cur_mf:command_queue_index(), 1)
-
             end
+        end
+    end,
+    true
+)
+
+core:add_listener(
+    "JarAdjArmiesFactionTurnEnd",
+    "FactionTurnEnd",
+    true,
+    function(context)
+        -- Log("\n\tJarAdjArmiesFactionTurnEnd")
+        local f = context:faction()
+        local mfl = f:military_force_list()
+        for i = 0, mfl:num_items() - 1 do
+            local cur_mf = mfl:item_at(i)
+            Log("\t", f:name(), cur_mf:general_character():cqi())
+
+            table.insert(cqi_attr_list, { [cur_mf:command_queue_index()] = true })
+            cm:apply_effect_bundle_to_force("wh2_dlc17_bundle_immune_all_attrition", cur_mf:command_queue_index(), 1)
+
         end
     end,
     true
