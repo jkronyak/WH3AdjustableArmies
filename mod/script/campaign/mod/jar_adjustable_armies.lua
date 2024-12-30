@@ -17,7 +17,7 @@ local log_override = false
 local function Log(...)
     if settings.dev_logging or log_override then
         local arg = {...}
-        local file = io.open("jar_adjustable_armies.txt", "a")
+        local file = io.open("_adjustable_armies.jar.log", "a")
         if not file then
             out("Unable to create/open log file")
             return
@@ -103,7 +103,6 @@ local function get_or_create_btn()
         return existing_button
     else
         local btn = UIComponent(
-            -- ui_button_parent:CreateComponent(button_name, "ui/templates/dev_button_small.twui.xml")
             ui_button_parent:CreateComponent(button_name, "ui/templates/square_medium_button.twui.xml")
         )
         btn:SetImagePath("ui/skins/default/button_basic_active_purple.png")
@@ -236,6 +235,7 @@ local function refresh_army_with_hero(lord_char, hero_char)
     end
 
     local faction = lord_char:faction()
+    local mf = lord_char:military_force()
 
     -- If the hero is embedded in the army, teleport them out first.
     -- Should be true if called from CharacterAncillaryGained_listener
@@ -248,8 +248,13 @@ local function refresh_army_with_hero(lord_char, hero_char)
         cm:teleport_to(cm:char_lookup_str(lord_char), x, y)
     end
 
+    if mf:unit_list():num_items() >= settings.army_size then
+        Log("Selected army is full")
+        hero_to_embed_cqi = nil
+        return
+    end
+
     -- Copy data all non-lord/non-hero units in the army and remove them
-    local mf = lord_char:military_force()
     local ul = mf:unit_list()
     local units_to_re_add = {}
 
