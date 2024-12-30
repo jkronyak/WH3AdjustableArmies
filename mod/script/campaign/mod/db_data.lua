@@ -13,11 +13,8 @@ end
 local function fetch_unit_purchasable_effects_resource_data(unit_purchasable_effect_key)
     local cco_root = cco("CcoCampaignRoot", "")
     local cco_unit_pe = cco_root:Call("DefaultDatabaseRecord('CcoUnitPurchasableEffectRecord')")
-    local v = cco_unit_pe:Call("RecordList.FirstContext(Key==\"" .. unit_purchasable_effect_key .. "\")")
-
-    -- local key = v:Call("Key") or "nil"
-    -- local resource_name = v:Call("ResourceName")
-    -- local cost_id = v:Call("CostContext.Id")
+    local v = cco_unit_pe:Call("RecordList.FirstContext(Key=='" .. unit_purchasable_effect_key .. "')")
+    
     local cost_amt = v:Call("ResourceCost") or 0
     local treasury_cost = v:Call("CostContext.TreasuryCost") or 0
     local resource_key = v:Call("CostContext.PooledResourceCostsList[0].ResourceKey")

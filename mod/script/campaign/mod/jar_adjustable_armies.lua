@@ -186,6 +186,7 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
     Log("factor", factor)
     Log("resource_cost", resource_cost)
     Log("treasury_cost", treasury_cost)
+    Log("unit num upgrades", unit:get_unit_purchased_effects():num_items())
 
     -- Add the necessary resource and treasury amounts and purchase the effect.
     if tonumber(treasury_cost) ~= 0 then cm:treasury_mod(faction:name(), -tonumber(treasury_cost)) end
@@ -195,7 +196,7 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
     if resource_key and resource_cost ~= 0 then
         local spent_b, gained_b = cm:get_total_pooled_resource_changed_for_faction(faction:name(), resource_key)
         before_amount = gained_b - spent_b
-        cm:faction_add_pooled_resource(faction:name(), resource_key, factor, -tonumber(resource_cost) * 9999999999999)
+        cm:faction_add_pooled_resource(faction:name(), resource_key, factor, -tonumber(resource_cost) + (30 * unit:get_unit_purchased_effects():num_items()))
     end
     Log("before_amount", before_amount)
 
