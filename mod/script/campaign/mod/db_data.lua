@@ -20,6 +20,8 @@ local function fetch_unit_purchasable_effects_resource_data(unit_purchasable_eff
     -- local cost_id = v:Call("CostContext.Id")
     local cost_amt = v:Call("ResourceCost") or 0
     local treasury_cost = v:Call("CostContext.TreasuryCost") or 0
+
+    -- TODO: Make this work for more than a single PooledResourceCost
     local resource_key = v:Call("CostContext.PooledResourceCostsList[0].ResourceKey")
 
     local factor = "other" -- CCO does not provide the keys for the pooled_resource_factors
@@ -28,7 +30,26 @@ local function fetch_unit_purchasable_effects_resource_data(unit_purchasable_eff
 
 end
 
+local function get_purchasable_effect_data_by_unit_cqi(cqi)
+    local cco_unit = cco("CcoCampaignUnit", cqi)
+    console_print(tostring(cco_unit))
+    local cost = cco_unit:Call(string.format([=[
+        (
+            purchased_effects_list = PurchasedEffectsList,
+            total_cost = PurchasableEffectsTotalPurchaseCost(purchased_effects_list)
+        )
+        => total_cost
+    ]=]))
+
+    console_print(tostring(cost))
+
+end
+get_purchasable_effect_data_by_unit_cqi(10054)
 return {
     fetch_mount_ancillaries = fetch_mount_ancillaries,
     fetch_unit_purchasable_effects_resource_data = fetch_unit_purchasable_effects_resource_data
 }
+
+--[[ 
+    CcoCampaignUnit -> 
+]]--

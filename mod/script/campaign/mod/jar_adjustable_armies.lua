@@ -7,6 +7,7 @@ Known Issues:
 *   Unit upgrades will not be refunded and reapplied for custom upgrades. This would require storing the 
     unit_purchasable_effect, factor, resource, resource cost, and treasury cost for
     every modded upgrade. 
+        * This is now done, but should be re-implemented to support dynamic cost increases via CCO
 
 ]] --
 -- [Settings] --
@@ -17,7 +18,7 @@ local log_override = false
 local function Log(...)
     if settings.dev_logging or log_override then
         local arg = {...}
-        local file = io.open("jar_adjustable_armies.txt", "a")
+        local file = io.open("_adjustable_armies.jar.log", "a")
         if not file then
             out("Unable to create/open log file")
             return
@@ -87,8 +88,8 @@ cm:add_loading_game_callback(
 )
 
 -- [User Interface] --
-local function get_or_create_btn()
-    Log("[FUNC] get_or_create_btn")
+local function get_or_create_hero_fix_btn()
+    Log("[FUNC] get_or_create_hero_fix_btn")
     local ui_button_parent = find_uicomponent(
         core:get_ui_root(), "hud_campaign", "info_panel_holder", "primary_info_panel_holder", "info_panel_background",
             "CharacterInfoPopup", "character_info_parent", "porthole_top"
@@ -97,15 +98,12 @@ local function get_or_create_btn()
         Log("Get or create button was called, but we couldn't find the parent!")
         return
     end
-    local button_name = "jar_test_button"
+    local button_name = "jar_hero_fix_btn"
     local existing_button = find_uicomponent(ui_button_parent, button_name)
     if is_uicomponent(existing_button) then
         return existing_button
     else
-        local btn = UIComponent(
-            -- ui_button_parent:CreateComponent(button_name, "ui/templates/dev_button_small.twui.xml")
-            ui_button_parent:CreateComponent(button_name, "ui/templates/square_medium_button.twui.xml")
-        )
+        local btn = UIComponent(ui_button_parent:CreateComponent(button_name, "ui/templates/square_medium_button.twui.xml"))
         btn:SetImagePath("ui/skins/default/button_basic_active_purple.png")
         btn:SetCanResizeCurrentStateImageHeight(0, true)
         btn:SetCanResizeCurrentStateImageWidth(0, true)
@@ -117,8 +115,8 @@ local function get_or_create_btn()
     end
 end
 
-local function populate_btn(btn)
-    Log("[FUNC] populate_btn")
+local function populate_hero_fix_btn(btn)
+    Log("[FUNC] populate_hero_fix_btn")
     if not is_uicomponent(btn) then
         Log("btn is falsy")
         return
@@ -129,9 +127,6 @@ local function populate_btn(btn)
         return
     end
     local char = cm:get_character_by_cqi(char_cqi)
-    Log("char:forenamesurename" .. char:get_forename() .. char:get_surname())
-    Log("char:is_embedded_in_military_force()" .. tostring(char:is_embedded_in_military_force()))
-    Log("char:has_military_force()" .. tostring(char:has_military_force()))
 
     if not (char:is_embedded_in_military_force() or char:has_military_force()) then
         Log("setting as active")
@@ -162,6 +157,43 @@ local function populate_btn(btn)
         btn:SetTooltipText("Do not click me!", true)
         btn:SetImagePath("ui/skins/default/button_basic_inactive_purple.png")
     end
+end
+
+local function get_or_create_exchange_btn()
+    Log("[FUNC] get_or_create_exchange_btn")
+    local ui_button_parent = find_uicomponent(
+        core:get_ui_root(), 
+        "unit_exchange",
+        "hud_center_docker",
+        "small_bar",
+        "buttongroup"
+    )
+    if not is_uicomponent(ui_button_parent) then
+        Log("Get or create button was called, but we couldn't find the parent!")
+        return
+    end
+    local button_name = "jar_exchange_btn"
+    local existing_button = find_uicomponent(ui_button_parent, button_name)
+    if is_uicomponent(existing_button) then
+        return existing_button
+    else
+        local btn = UIComponent(ui_button_parent:CreateComponent(button_name, "ui/templates/square_medium_button.twui.xml"))
+        btn:SetImagePath("ui/skins/default/button_basic_active_purple.png")
+        return btn
+    end
+end
+
+local function populate_exchange_btn(btn)
+    Log("[FUNC] populate_exchange_btn")
+    if not is_uicomponent(btn) then
+        Log("btn is falsy")
+        return
+    end    
+    Log("setting exchange_tn as active")
+    btn:SetState("active")
+    btn:SetTooltipText("Click here to force the exchange!", true)
+    btn:SetVisible(true)
+
 end
 
 -- [Data] --
@@ -253,19 +285,33 @@ local function refresh_army_with_hero(lord_char, hero_char)
     local ul = mf:unit_list()
     local units_to_re_add = {}
 
+
+    -- TODO: Rewrite to use CCO? 
+    -- Would allow dynamic resource costs to be extracted directly
+    -- ex. Scrap upgrades increase by +30 per previous upgrade 
+
     for i = 0, ul:num_items() - 1 do
         local cur = ul:item_at(i)
         if cur:unit_class() ~= "com" then
-            table.insert(
-                units_to_re_add, {
-                    cqi = cur:command_queue_index(),
-                    key = cur:unit_key(),
-                    experience_level = cur:experience_level(),
-                    strength = cur:percentage_proportion_of_full_strength(),
-                    purchased_effects = cur:get_unit_purchased_effects()
-                }
-            )
-            cm:remove_unit_from_character(cm:char_lookup_str(mf:general_character()), cur:unit_key())
+
+            local cqi = cur:command_queue_index()
+            local key = cur:unit_key()
+            local experience_level = cur:experience_level()
+            local hp_pct = cur:percentage_proportion_of_full_strength()
+
+
+            local cco_unit = cco("CcoCampaignUnit", cqi)
+
+            -- table.insert(
+            --     units_to_re_add, {
+            --         cqi = cur:command_queue_index(),
+            --         key = cur:unit_key(),
+            --         experience_level = cur:experience_level(),
+            --         strength = cur:percentage_proportion_of_full_strength(),
+            --         purchased_effects = cur:get_unit_purchased_effects()
+            --     }
+            -- )
+            -- cm:remove_unit_from_character(cm:char_lookup_str(mf:general_character()), cur:unit_key())
         end
     end
 
@@ -343,7 +389,7 @@ core:add_listener(
     end,
     function()
         Log("[LSTR] JarAdjArmiesCharSelected")
-        populate_btn(get_or_create_btn())
+        populate_hero_fix_btn(get_or_create_hero_fix_btn())
         end,
     true
 )
@@ -365,11 +411,38 @@ core:add_listener(
 core:add_listener(
     "JarAdjArmiesBtnClicked",
     "ComponentLClickUp",
-    function(context) return context.string == "jar_test_button" end,
+    function(context) return context.string == "jar_hero_fix_btn" end,
     function()
         Log("[LSTR] JarAdjArmiesBtnClicked")
         handle_hero_selected()
-        populate_btn(get_or_create_btn())
+        populate_hero_fix_btn(get_or_create_hero_fix_btn())
+    end,
+    true
+)
+
+core:add_listener(
+    "JarAdjArmiesExchangeBtnClicked", 
+    "ComponentLClickUp",
+    function(context) return context.string == "jar_exchange_btn" end,
+    function() 
+        Log("[LSTR] JarAdjArmiesExchangeBtnClicked")
+        local p2_cco = cco("CcoComponent", "main_units_panel_2")
+        local result = p2_cco:Call(string.format([=[
+            (
+                unit_list = ChildList.FirstContext(Id == 'units').ChildList
+                .Filter( (x) => x.IsSelected == true)
+                .Transform(ContextsList).Filter( (x) => IsOfType(x, 'CcoCampaignUnit'))
+
+            )
+            =>
+            unit_list
+
+        
+        ]=]))
+
+        for _, v in pairs(result) do
+            console_print(tostring(v:Call("UniqueUiId")))
+        end
     end,
     true
 )
@@ -388,6 +461,18 @@ core:add_listener(
         Log("[LSTR] JarAdjArmiesCharAncGained")
         local hero = context:character()
         refresh_army_with_hero(hero:embedded_in_military_force():general_character(), hero)
+    end,
+    true
+)
+
+core:add_listener(
+    "JarAdjArmiesExchangePanelOpened",
+    "PanelOpenedCampaign",
+    function(context)
+        return context.string == "unit_exchange"
+    end,
+    function()
+        populate_exchange_btn(get_or_create_exchange_btn())
     end,
     true
 )
