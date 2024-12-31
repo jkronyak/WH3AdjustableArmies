@@ -196,7 +196,7 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
     if resource_key and resource_cost ~= 0 then
         local spent_b, gained_b = cm:get_total_pooled_resource_changed_for_faction(faction:name(), resource_key)
         before_amount = gained_b - spent_b
-        cm:faction_add_pooled_resource(faction:name(), resource_key, factor, -tonumber(resource_cost) + (30 * unit:get_unit_purchased_effects():num_items()))
+        cm:faction_add_pooled_resource(faction:name(), resource_key, factor, -tonumber(resource_cost) * 100)
     end
     Log("before_amount", before_amount)
 
@@ -217,7 +217,6 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
     if correction_amount ~= 0 then
         cm:faction_add_pooled_resource(faction:name(), resource_key, factor, correction_amount)
     end
-
 end
 
 -- Receives Character lord_char and Character hero_char

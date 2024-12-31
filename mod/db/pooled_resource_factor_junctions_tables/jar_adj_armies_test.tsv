@@ -1,0 +1,4 @@
+unique_id	factor	resource	minimum	maximum	specific_faction_set
+#pooled_resource_factor_junctions_tables;2;db/pooled_resource_factor_junctions_tables/jar_adj_armies_test					
+skv_growth_vat_other	other	skv_growth_vat	-2147483647	2147483647	
+skv_mutagen_other	other	skv_mutagen	-2147483647	2147483647	
