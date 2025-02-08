@@ -10,7 +10,7 @@ Known Issues:
 
 ]] --
 -- [Settings] --
-local settings = {army_size = 40, auto_refresh = true, dev_logging = true}
+local settings = {army_size = 40, auto_refresh = true, dev_logging = false}
 
 -- [Logging] --
 local log_override = false
@@ -63,8 +63,8 @@ local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
-    player_army_size_offset = 0x1F5973C
-    exchange_panel_ui_offset = 0x1F1AB0C
+    player_army_size_offset = 0x1F5B5BC
+    exchange_panel_ui_offset = 0x1F1C75C
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
@@ -200,7 +200,18 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
     end
     Log("before_amount", before_amount)
 
+    local num_upgrades = unit:get_unit_purchased_effects():num_items()
     cm:faction_purchase_unit_effect(faction, unit, upgrade)
+
+    if unit:get_unit_purchased_effects():num_items() == num_upgrades then
+        Log("Purchasable effect was not applied to the unit. Setting lock state to false and trying again")
+        cm:faction_set_unit_purchasable_effect_lock_state(faction, upgrade:record_key(), "", false)
+        if unit:can_purchase_effect(faction, upgrade) then
+            Log("can_purchase_effect is now true. Purchasing effect and setting lock state to true")
+            cm:faction_purchase_unit_effect(faction, unit, upgrade)
+            cm:faction_set_unit_purchasable_effect_lock_state(faction, upgrade:record_key(), "", true)
+        end
+    end
 
     -- Get the pooled_resource total before after buying the upgrades and adding the refund. 
     -- Adjust the amount to be the same as before.
