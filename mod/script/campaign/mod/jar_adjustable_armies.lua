@@ -63,8 +63,8 @@ local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
-    player_army_size_offset = 0x1F5B5BC
-    exchange_panel_ui_offset = 0x1F1C75C
+    player_army_size_offset = 0x1F5EAAC
+    exchange_panel_ui_offset = 0x1F1FC4C
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
@@ -199,10 +199,10 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
         cm:faction_add_pooled_resource(faction:name(), resource_key, factor, -tonumber(resource_cost) * 100)
     end
     Log("before_amount", before_amount)
+    
 
     local num_upgrades = unit:get_unit_purchased_effects():num_items()
     cm:faction_purchase_unit_effect(faction, unit, upgrade)
-
     if unit:get_unit_purchased_effects():num_items() == num_upgrades then
         Log("Purchasable effect was not applied to the unit. Setting lock state to false and trying again")
         cm:faction_set_unit_purchasable_effect_lock_state(faction, upgrade:record_key(), "", false)
@@ -212,6 +212,7 @@ local function reapply_unit_upgrade(upgrade, faction, unit)
             cm:faction_set_unit_purchasable_effect_lock_state(faction, upgrade:record_key(), "", true)
         end
     end
+    
 
     -- Get the pooled_resource total before after buying the upgrades and adding the refund. 
     -- Adjust the amount to be the same as before.
@@ -278,7 +279,8 @@ local function refresh_army_with_hero(lord_char, hero_char)
                     key = cur:unit_key(),
                     experience_level = cur:experience_level(),
                     strength = cur:percentage_proportion_of_full_strength(),
-                    purchased_effects = cur:get_unit_purchased_effects()
+                    purchased_effects = cur:get_unit_purchased_effects(),
+                    name = cco("CcoCampaignUnit", cur:command_queue_index()):Call("Name")
                 }
             )
             cm:remove_unit_from_character(cm:char_lookup_str(mf:general_character()), cur:unit_key())
@@ -295,7 +297,8 @@ local function refresh_army_with_hero(lord_char, hero_char)
         local new_unit = mf:unit_list():item_at(i + num_units - 1)
         if og_unit.strength ~= 100 then cm:set_unit_hp_to_unary_of_maximum(new_unit, og_unit.strength / 100) end
         if og_unit.experience_level ~= 0 then cm:add_experience_to_unit(new_unit, og_unit.experience_level) end
-
+        Log("Changing unit_name", og_unit.name)
+        cm:change_custom_unit_name(new_unit, og_unit.name)
         local throt_instability_list = {}
 
         if og_unit.purchased_effects:num_items() > 0 then
