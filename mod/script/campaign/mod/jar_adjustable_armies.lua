@@ -63,8 +63,8 @@ local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
-    player_army_size_offset = 0x1FC1FAC
-    exchange_panel_ui_offset = 0x1F831CC
+    player_army_size_offset = 0x1FC27AC
+    exchange_panel_ui_offset = 0x1F839CC
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
