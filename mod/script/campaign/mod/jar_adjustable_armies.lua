@@ -3,11 +3,6 @@ Known Issues:
 *   When a hero gets embedded via script, the army effect (ex. replenishment rate) only applies 
     on reload or next turn. This does not always occur. 
 *   Units do not retain their progress to the next experience level
-*   Unable to embed a hero into an army which is full of heroes (limitation of cm:embed_agent_in_force())
-*   Unit upgrades will not be refunded and reapplied for custom upgrades. This would require storing the 
-    unit_purchasable_effect, factor, resource, resource cost, and treasury cost for
-    every modded upgrade. 
-
 ]] --
 -- [Settings] --
 local settings = {army_size = 40, auto_refresh = true, dev_logging = false}
@@ -63,8 +58,8 @@ local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
-    player_army_size_offset = 0x1FC27AC
-    exchange_panel_ui_offset = 0x1F839CC
+    player_army_size_offset = 0x1FBDF0C
+    exchange_panel_ui_offset = 0x1F7EE4C
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
