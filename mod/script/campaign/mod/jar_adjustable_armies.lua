@@ -5,7 +5,7 @@ Known Issues:
 *   Units do not retain their progress to the next experience level
 ]] --
 -- [Settings] --
-local settings = {army_size = 40, auto_refresh = true, dev_logging = false}
+local settings = {army_size = 40, auto_refresh = true, dev_logging = false, ai_army_size = 40}
 
 -- [Logging] --
 local log_override = false
@@ -38,6 +38,7 @@ core:add_listener(
         local mct = context:mct()
         local my_mod = mct:get_mod_by_key("jar_adjustable_armies")
         settings.army_size = my_mod:get_option_by_key("army_size"):get_finalized_setting()
+        settings.ai_army_size = my_mod:get_option_by_key("ai_army_size"):get_finalized_setting()
         settings.auto_refresh = my_mod:get_option_by_key("auto_refresh"):get_finalized_setting()
         settings.dev_logging = my_mod:get_option_by_key("dev_logging"):get_finalized_setting()
     end, true
@@ -52,12 +53,13 @@ core:add_listener(
 
 -- [Army Size] --
 local mr = assert(_G.memreader)
-local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army_size_offset
+local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army_size_offset, ai_new_army_limit
 -- local unknown_20_offset = nil
 
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
+    ai_new_army_limit = mr.uint32(settings.ai_army_size)
     player_army_size_offset = 0x1FBDF0C
     exchange_panel_ui_offset = 0x1F7EE4C
     ai_army_size_offset = player_army_size_offset + 0x10
@@ -68,7 +70,7 @@ function set_addresses()
     Log("[FUNC] set_addresses")
     local base_ptr = mr.base -- ex: 0x0000000140000000
     mr.write(base_ptr, player_army_size_offset, new_army_limit)
-    mr.write(base_ptr, ai_army_size_offset, new_army_limit)
+    mr.write(base_ptr, ai_army_size_offset, ai_new_army_limit)
     mr.write(base_ptr, exchange_panel_ui_offset, new_army_limit)
     -- self.mr.write(base_ptr, self.unknown_20_offset, self.new_army_limit)
 end
