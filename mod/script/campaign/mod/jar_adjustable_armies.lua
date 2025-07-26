@@ -2,7 +2,7 @@
 Known Issues:
 *   When a hero gets embedded via script, the army effect (ex. replenishment rate) only applies 
     on reload or next turn. This does not always occur. 
-*   Units do not retain their progress to the next experience level
+*   Units do not retain their progress to the next experience level.
 ]] --
 -- [Settings] --
 local settings = {army_size = 40, auto_refresh = true, dev_logging = false, ai_army_size = 40}
@@ -60,8 +60,8 @@ function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
     ai_new_army_limit = mr.uint32(settings.ai_army_size)
-    player_army_size_offset = 0x20198EC
-    exchange_panel_ui_offset = 0x1FDA32C
+    player_army_size_offset = 0x20182BC
+    exchange_panel_ui_offset = 0x1FD8CFC
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
