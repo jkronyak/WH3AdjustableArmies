@@ -13,7 +13,7 @@ Known Issues:
 local settings = {army_size = 40, auto_refresh = true, dev_logging = true}
 
 -- [Logging] --
-local log_override = false
+local log_override = true
 local function Log(...)
     if settings.dev_logging or log_override then
         local arg = {...}
@@ -63,8 +63,9 @@ local new_army_limit, player_army_size_offset, exchange_panel_ui_offset, ai_army
 function init_addresses()
     Log("[FUNC] init_addresses")
     new_army_limit = mr.uint32(settings.army_size)
-    player_army_size_offset = 0x1F5973C
-    exchange_panel_ui_offset = 0x1F1AB0C
+    ai_new_army_limit = mr.uint32(settings.ai_army_size)
+    exchange_panel_ui_offset = 0x2091C6C
+    player_army_size_offset = 0x20D121C
     ai_army_size_offset = player_army_size_offset + 0x10
     -- unknown_20_offset = exchange_panel_ui_offset + 0x10
 end
@@ -474,6 +475,42 @@ core:add_listener(
     end,
     true
 )
+
+core:add_listener(
+    "JarFactionTurnEnd",
+    "FactionTurnEnd",
+    true,
+    function(context)
+        local f = context:faction()
+        local mf_list= f:military_force_list()
+        for i = 0, mf_list:num_items() - 1 do
+            local mf = mf_list:item_at(i)
+            local attr_flag = mf:will_suffer_any_attrition()
+            if attr_flag then
+                Log('**attr f', f:name())
+
+                local eb_list = mf:effect_bundles()
+                for k = 0, eb_list:num_items() - 1 do 
+                    local eb = eb_list:item_at(k)
+                    Log('*eb', eb:key())
+                end
+                
+                local unit_list = mf:unit_list()
+                for j = 0, unit_list:num_items() - 1 do
+                    local unit = unit_list:item_at(j)
+                    local unit_cqi = unit:command_queue_index()
+                    local attr_num = cco("CcoCampaignUnit", unit_cqi):Call("AttritionPercent")
+                    if attr_num > 0 then
+                        Log('**attr_num', attr_num)
+                    end
+                end
+
+            end
+        end
+    end,
+    true
+)
+
 
 
 cm:add_first_tick_callback(
