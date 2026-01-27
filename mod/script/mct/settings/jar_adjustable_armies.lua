@@ -16,18 +16,6 @@ option_army_size:slider_set_min_max(20, 40)
 option_army_size:slider_set_step_size(1)
 option_army_size:set_default_value(40)
 
-local option_ai_army_size = mct_mod:add_new_option("ai_army_size", "slider")
-option_ai_army_size:set_text("AI Army Size")
-option_ai_army_size:set_tooltip_text("Warning: Settings this to value different than the Player Army Size is experimental. Changing this setting for an on-going campaign may cause stability issues or crashes. Lowering this setting for an on-going campaign may cause you to lose units. Requires reload to take effect.\n\nEach step modifies the maximum army size by 1.\nRange: [20,40]")
-option_ai_army_size:slider_set_min_max(20, 40)
-option_ai_army_size:slider_set_step_size(1)
-option_ai_army_size:set_default_value(40)
-
-local option_auto_refresh = mct_mod:add_new_option("auto_refresh", "checkbox")
-option_auto_refresh:set_text("Auto Refresh Army")
-option_auto_refresh:set_tooltip_text("Automatically 'refreshes' an army when one of its heroes gains a new mount. This will fix the issue where a hero does not appear in battle after gaining a mount.\n\nSee workshop page for limitations.")
-option_auto_refresh:set_default_value(true)
-
 local option_dev_logging = mct_mod:add_new_option("dev_logging", "checkbox")
 option_dev_logging:set_text("Developer Logging")
 option_dev_logging:set_tooltip_text("Enables custom logging to jar_adjustable_armies.txt in the data folder.")
