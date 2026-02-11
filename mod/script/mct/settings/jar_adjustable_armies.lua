@@ -16,6 +16,13 @@ option_army_size:slider_set_min_max(20, 40)
 option_army_size:slider_set_step_size(1)
 option_army_size:set_default_value(40)
 
+local option_ai_army_size = mct_mod:add_new_option("ai_army_size", "slider")
+option_ai_army_size:set_text("AI Army Size")
+option_ai_army_size:set_tooltip_text("Warning: Using a different army size for the player and AI is experimental, and may not work in all cases. Use at your own discretion. Each step modifies the maximum army size by 1.\nRange: [20,40]")
+option_ai_army_size:slider_set_min_max(20, 40)
+option_ai_army_size:slider_set_step_size(1)
+option_ai_army_size:set_default_value(40)
+
 local option_dev_logging = mct_mod:add_new_option("dev_logging", "checkbox")
 option_dev_logging:set_text("Developer Logging")
 option_dev_logging:set_tooltip_text("Enables custom logging to jar_adjustable_armies.txt in the data folder.")

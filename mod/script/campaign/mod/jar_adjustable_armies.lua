@@ -1,6 +1,7 @@
 
 local settings = { 
     army_size = 40,
+    ai_army_size = 40,
     dev_logging = false,
     force_siege_assault = true,
     force_siege_assault_turns = 3
@@ -32,53 +33,57 @@ local function Log(...)
     end
 end
 
+-- Offsets:
+-- 40 -> 0
+-- 10260 -> -1
+-- 2621460 -> -2
+-- 0 -> 1 or 2
+
 ------------- [Army Size] -------------
 local address_mapping = {
-    -- UI / Player limits
-    player_limit_1        = { address = 0x0221984F, offset = -1 },
-    ai_limit              = { address = 0x02219860, offset = 0 },
-    player_limit_2        = { address = 0x0221988F, offset = -1 },
-    player_limit_3        = { address = 0x022198A0, offset = 0 },
-    ui_variant_1          = { address = 0x02AD46A9, offset = 1},
-    ui_variant_2          = { address = 0x02AD46B5, offset = 1 },
 
-    -- Not sure
-    byte_patch            = { address = 0x0198C09F, offset = -1 },
+    -- UI
+    player_limit            = { address = 0x221488F, offset = -1 },
 
-    exc_panel_1           = { address = 0x01B49DB4, offset = 0 },
-    exc_panel_2           = { address = 0x01B49DC5, offset = 1},
+    exchange_panel_1        = { address = 0x1B44194, offset = 0 },
+    exchange_panel_2        = { address = 0x1B441A5, offset = 1 },
+    exchange_panel_3        = { address = 0x2205CAE, offset = -2 },
+    exchange_panel_4        = { address = 0x2205CBA, offset = 2 },
 
-    -- Loading
-    loading_1             = { address = 0x02212622, offset = 2 },
-    loading_2             = { address = 0x0221262E, offset = -2 },
-    loading_3             = { address = 0x027E5A23, offset = -1 },
-    loading_4             = { address = 0x027E5A2F, offset = -1 },
+    hero_embedding_1        = { address = 0x220551C, offset = 0 },
+    hero_embedding_2        = { address = 0x2205528, offset = 0 },
 
-    -- Stability
-    stability_1           = { address = 0x0220A48C, offset = 0 },
-    stability_2           = { address = 0x0220A498, offset = 0 },
-    stability_3           = { address = 0x0220ACCB, offset = -1 },
-    stability_4           = { address = 0x0220ACD7, offset = -1 },
-    stability_5           = { address = 0x02229E0D, offset = 1 },
-    stability_6           = { address = 0x02229E19, offset = 1 },
-    stability_7           = { address = 0x024C9FBB, offset = -1 },
-    stability_8           = { address = 0x024C9FC7, offset = -1 },
-    stability_9           = { address = 0x029256C7, offset = -1 },
-    stability_10          = { address = 0x029256D3, offset = -1 },
-    stability_11          = { address = 0x02A8F670, offset = 0 },
-    stability_12          = { address = 0x02A8F67C, offset = 0},
-    stability_13          = { address = 0x02ADD220, offset = 0 },
-    stability_14          = { address = 0x02ADD22C, offset = 0 },
-    stability_15          = { address = 0x02843308, offset = 0 },
-    stability_16          = { address = 0x02843314, offset = 0 },
-    stability_17          = { address = 0x02399041, offset = 1 },
-    stability_18          = { address = 0x0239904D, offset = 1 },
-    stability_19          = { address = 0x01C04506, offset = 0},
-    stability_20          = { address = 0x01C04512, offset = 0 },
+    -- Savegame
+    savegame_loading_1      = { address = 0x220D602, offset = 2 },
+    savegame_loading_2      = { address = 0x220D60E, offset = -2 },
+    savegame_loading_3      = { address = 0x282B453, offset = -1 },
+    savegame_loading_4      = { address = 0x282B45F, offset = -1 },
 
     -- Recruit
-    recruit_chaos_realm   = { address = 0x02ADE45A, offset = 2 },
-    recruit_immortal_emp  = { address = 0x02ADE0D3, offset = -1 }
+    recruit_chaos_realms    = { address = 0x29B2EEA, offset = 2 },
+
+    recruit_immortal_1      = { address = 0x29B2B63, offset = -1 },
+    recruit_immortal_2      = { address = 0x29A9139, offset = 1 },
+    recruit_immortal_3      = { address = 0x29A9145, offset = 1 },
+
+    -- TBD
+    tbd_1                = { address = 0x2224E6D, offset = 1 },
+    tbd_2                = { address = 0x2224E79, offset = 1 },
+    tbd_3                = { address = 0x24C51AB, offset = -1 },
+    tbd_4                = { address = 0x24C51B7, offset = -1 },
+    tbd_5                = { address = 0x27E6288, offset = 0 },
+    tbd_6                = { address = 0x27E6294, offset = 0 },
+    tbd_7                = { address = 0x29B1CB0, offset = 0 },
+    tbd_8                = { address = 0x29B1CBC, offset = 0 },
+    tbd_9                = { address = 0x2A25A77, offset = -1 },
+    tbd_10               = { address = 0x2A25A83, offset = -1 },
+    tbd_11               = { address = 0x22148E0, offset = 0 },
+    tbd_12               = { address = 0x22148CF, offset = -1 },
+}
+
+local ai_address_mapping = {
+    -- UI / Player limits
+    ai_limit                = { address = 0x22148A0, offset = 0 },
 }
 
 function set_addresses()
@@ -87,6 +92,12 @@ function set_addresses()
     for name, addr in pairs(address_mapping) do
         Log(string.format("Updating %s (0x%x %d) to %d", name, addr.address, addr.offset, size))
         mr.write(mr.add(base, addr.address), addr.offset, mr.uint32(size))
+    end
+    
+    local ai_size = settings.ai_army_size
+    for name, addr in pairs(ai_address_mapping) do
+        Log(string.format("Updating %s (0x%x %d) to %d", name, addr.address, addr.offset, size))
+        mr.write(mr.add(base, addr.address), addr.offset, mr.uint32(ai_size))
     end
 end
 
@@ -211,6 +222,7 @@ core:add_listener(
         local mct = context:mct()
         local my_mod = mct:get_mod_by_key("jar_adjustable_armies")
         settings.army_size = my_mod:get_option_by_key("army_size"):get_finalized_setting()
+        settings.ai_army_size = my_mod:get_option_by_key("ai_army_size"):get_finalized_setting() 
         settings.dev_logging = my_mod:get_option_by_key("dev_logging"):get_finalized_setting()
         settings.force_siege_assault = my_mod:get_option_by_key("force_siege_assault"):get_finalized_setting()
         settings.force_siege_assault_turns = my_mod:get_option_by_key("force_siege_assault_turns"):get_finalized_setting()
