@@ -38,52 +38,57 @@ end
 -- 10260 -> -1
 -- 2621460 -> -2
 -- 0 -> 1 or 2
+-- REMEMBER TO USE 4 BYTES TYPE IN CE TO FIND OFFSETS
 
 ------------- [Army Size] -------------
 local address_mapping = {
-
     -- UI
-    player_limit            = { address = 0x221488F, offset = -1 },
+    player_limit            = { address = 0x221D36F, offset = -1 },
+    exchange_panel_1        = { address = 0x221D3AF, offset = -1 },
 
-    exchange_panel_1        = { address = 0x1B44194, offset = 0 },
-    exchange_panel_2        = { address = 0x1B441A5, offset = 1 },
-    exchange_panel_3        = { address = 0x2205CAE, offset = -2 },
-    exchange_panel_4        = { address = 0x2205CBA, offset = 2 },
+    exchange_panel_2        = { address = 0x221D3C0, offset = 0 },
+    exchange_panel_3       = { address = 0x1C057E7, offset = -1 },
+    exchange_panel_4       = { address = 0x1C057F3, offset = -1 },
+    exchange_panel_5       = { address = 0x1B4ACF4, offset = 0 },
+    exchange_panel_6       = { address = 0x1B4AD05, offset = 1 },
 
-    hero_embedding_1        = { address = 0x220551C, offset = 0 },
-    hero_embedding_2        = { address = 0x2205528, offset = 0 },
+    -- Loading
+    savegame_loading_1      = { address = 0x22160A2, offset = 2 },
+    savegame_loading_2      = { address = 0x22160AE, offset = -2 },
+    savegame_loading_3      = { address = 0x27EA1D3, offset = -1 },
+    savegame_loading_4      = { address = 0x27EA1DF, offset = -1 },
 
-    -- Savegame
-    savegame_loading_1      = { address = 0x220D602, offset = 2 },
-    savegame_loading_2      = { address = 0x220D60E, offset = -2 },
-    savegame_loading_3      = { address = 0x282B453, offset = -1 },
-    savegame_loading_4      = { address = 0x282B45F, offset = -1 },
+    -- -- Recruit
+    recruit_immortal_1      = { address = 0x2AE2C6A, offset = 2 },
+    recruit_immortal_2      = { address = 0x2AD8EC5, offset = 1 },
+    recruit_immortal_3      = { address = 0x2AD8EB9, offset = 1 },
+    recruit_immortal_4      = { address = 0x2AE28E3, offset = -1 },
 
-    -- Recruit
-    recruit_chaos_realms    = { address = 0x29B2EEA, offset = 2 },
+    -- -- Stability
+    stability_1             = { address = 0x220DFAC, offset = 0 },
+    stability_2             = { address = 0x220DFB8, offset = 0 },
+    stability_3             = { address = 0x220E73E, offset = -2 },
+    stability_4             = { address = 0x220E74A, offset = 2 },
+    stability_5             = { address = 0x222D93D, offset = 1 },
+    stability_6             = { address = 0x222D949, offset = 1 },
+    stability_7             = { address = 0x24CD9EB, offset = -1 },
+    stability_8             = { address = 0x24CD9F7, offset = -1 },
+    stability_9             = { address = 0x2847908, offset = 0 },
+    stability_10            = { address = 0x2847914, offset = 0 },
+    stability_11            = { address = 0x2929F47, offset = -1 },
+    stability_12            = { address = 0x2929F53, offset = -1 },
+    stability_13            = { address = 0x2AE1A30, offset = 0 },
+    stability_14            = { address = 0x2AE1A3C, offset = 0 },
 
-    recruit_immortal_1      = { address = 0x29B2B63, offset = -1 },
-    recruit_immortal_2      = { address = 0x29A9139, offset = 1 },
-    recruit_immortal_3      = { address = 0x29A9145, offset = 1 },
-
-    -- TBD
-    tbd_1                = { address = 0x2224E6D, offset = 1 },
-    tbd_2                = { address = 0x2224E79, offset = 1 },
-    tbd_3                = { address = 0x24C51AB, offset = -1 },
-    tbd_4                = { address = 0x24C51B7, offset = -1 },
-    tbd_5                = { address = 0x27E6288, offset = 0 },
-    tbd_6                = { address = 0x27E6294, offset = 0 },
-    tbd_7                = { address = 0x29B1CB0, offset = 0 },
-    tbd_8                = { address = 0x29B1CBC, offset = 0 },
-    tbd_9                = { address = 0x2A25A77, offset = -1 },
-    tbd_10               = { address = 0x2A25A83, offset = -1 },
-    tbd_11               = { address = 0x22148E0, offset = 0 },
-    tbd_12               = { address = 0x22148CF, offset = -1 },
+    -- -- TBD
+    tbd_1                   = { address = 0x2A93E80, offset = 0 },
+    tbd_2                   = { address = 0x2A93E8C, offset = 0 },
+    tbd_3                   = { address = 0x2B30D00, offset = 0 },
 }
 
 local ai_address_mapping = {
     -- UI / Player limits
-    ai_limit                = { address = 0x22148A0, offset = 0 },
+    ai_limit                = { address = 0x221D380, offset = 0 }, -- done
 }
 
 function set_addresses()
