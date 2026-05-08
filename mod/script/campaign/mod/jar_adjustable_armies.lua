@@ -42,53 +42,36 @@ end
 
 ------------- [Army Size] -------------
 local address_mapping = {
-    -- UI
-    player_limit            = { address = 0x221D36F, offset = -1 },
-    exchange_panel_1        = { address = 0x221D3AF, offset = -1 },
+    -- 14 00 00 00 3B F8 0F 47 F8 EB 05 BF 14
+    group1_1        = { address = 0x2219702, offset = 2 },
+    group1_2        = { address = 0x27ED833, offset = -1 },
 
-    exchange_panel_2        = { address = 0x221D3C0, offset = 0 },
-    exchange_panel_3       = { address = 0x1C057E7, offset = -1 },
-    exchange_panel_4       = { address = 0x1C057F3, offset = -1 },
-    exchange_panel_5       = { address = 0x1B4ACF4, offset = 0 },
-    exchange_panel_6       = { address = 0x1B4AD05, offset = 1 },
+    -- 14 00 00 00 3B C8 0F 47 C8 EB 05 B9 14
+    group2_1        = { address = 0x1C08EB7, offset = -1 },
+    group2_2        = { address = 0x221160C, offset = 0 },
+    group2_3        = { address = 0x2211D9E, offset = -2 },
+    group2_4        = { address = 0x2230F9D, offset = 1 },
+    group2_5        = { address = 0x23A0021, offset = 1 },
+    group2_6        = { address = 0x24D104B, offset = -1 },
+    group2_7        = { address = 0x284AF68, offset = 0 },
+    group2_8        = { address = 0x29BE760, offset = 0 },
+    group2_9        = { address = 0x2A32597, offset = -1 },
+    group2_10       = { address = 0x2CC6990, offset = 0 },
 
-    -- Loading
-    savegame_loading_1      = { address = 0x22160A2, offset = 2 },
-    savegame_loading_2      = { address = 0x22160AE, offset = -2 },
-    savegame_loading_3      = { address = 0x27EA1D3, offset = -1 },
-    savegame_loading_4      = { address = 0x27EA1DF, offset = -1 },
+    -- 14 00 00 00 8B 80 08 01 00 00 3B C1 0F 47 C1 C3 B8 14
+    group3_1        = { address = 0x1B4E554, offset = 0 },
+    group3_2        = { address = 0x22209CF, offset = -1 },
+    group3_3        = { address = 0x2220A0F, offset = -1 },
 
-    -- -- Recruit
-    recruit_immortal_1      = { address = 0x2AE2C6A, offset = 2 },
-    recruit_immortal_2      = { address = 0x2AD8EC5, offset = 1 },
-    recruit_immortal_3      = { address = 0x2AD8EB9, offset = 1 },
-    recruit_immortal_4      = { address = 0x2AE28E3, offset = -1 },
-
-    -- -- Stability
-    stability_1             = { address = 0x220DFAC, offset = 0 },
-    stability_2             = { address = 0x220DFB8, offset = 0 },
-    stability_3             = { address = 0x220E73E, offset = -2 },
-    stability_4             = { address = 0x220E74A, offset = 2 },
-    stability_5             = { address = 0x222D93D, offset = 1 },
-    stability_6             = { address = 0x222D949, offset = 1 },
-    stability_7             = { address = 0x24CD9EB, offset = -1 },
-    stability_8             = { address = 0x24CD9F7, offset = -1 },
-    stability_9             = { address = 0x2847908, offset = 0 },
-    stability_10            = { address = 0x2847914, offset = 0 },
-    stability_11            = { address = 0x2929F47, offset = -1 },
-    stability_12            = { address = 0x2929F53, offset = -1 },
-    stability_13            = { address = 0x2AE1A30, offset = 0 },
-    stability_14            = { address = 0x2AE1A3C, offset = 0 },
-
-    -- -- TBD
-    tbd_1                   = { address = 0x2A93E80, offset = 0 },
-    tbd_2                   = { address = 0x2A93E8C, offset = 0 },
-    tbd_3                   = { address = 0x2B30D00, offset = 0 },
+    -- Recruitment
+    recruitment_1   = { address = 0x29BF99A, offset = 2 },
+    recruitment_2   = { address = 0x29BF613, offset = -1 },
+    recruitment_3   = { address = 0x284AF74, offset = 0 },
 }
 
 local ai_address_mapping = {
-    -- UI / Player limits
-    ai_limit                = { address = 0x221D380, offset = 0 }, -- done
+    -- AI Army Size
+    ai_army_size    = { address = 0x22209E0, offset = 0 },
 }
 
 function set_addresses()
