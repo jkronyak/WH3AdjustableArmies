@@ -42,38 +42,43 @@ end
 
 ------------- [Army Size] -------------
 local address_mapping = {
-    -- 14 00 00 00 3B F8 0F 47 F8 EB 05 BF 14
-    group1_1        = { address = 0x2219702, offset = 2 },
-    group1_2        = { address = 0x27ED833, offset = -1 },
-
-    -- 14 00 00 00 3B C8 0F 47 C8 EB 05 B9 14
-    group2_1        = { address = 0x1C08EB7, offset = -1 },
-    group2_2        = { address = 0x221160C, offset = 0 },
-    group2_3        = { address = 0x2211D9E, offset = -2 },
-    group2_4        = { address = 0x2230F9D, offset = 1 },
-    group2_5        = { address = 0x23A0021, offset = 1 },
-    group2_6        = { address = 0x24D104B, offset = -1 },
-    group2_7        = { address = 0x284AF68, offset = 0 },
-    group2_8        = { address = 0x29BE760, offset = 0 },
-    group2_9        = { address = 0x2A32597, offset = -1 },
-    group2_10       = { address = 0x2CC6990, offset = 0 },
-
-    -- 14 00 00 00 8B 80 08 01 00 00 3B C1 0F 47 C1 C3 B8 14
-    group3_1        = { address = 0x1B4E554, offset = 0 },
-    group3_2        = { address = 0x22209CF, offset = -1 },
-    group3_3        = { address = 0x2220A0F, offset = -1 },
-
-    -- Recruitment
-    recruitment_1   = { address = 0x29BF99A, offset = 2 },
-    recruitment_2   = { address = 0x29BF613, offset = -1 },
-    recruitment_3   = { address = 0x284AF74, offset = 0 },
+    { address = 0x1b4e553, offset = 0 },
+    { address = 0x1b4e564, offset = 1 },
+    { address = 0x1c08eb6, offset = 1 },
+    { address = 0x1c08ec2, offset = 1 },
+    { address = 0x221160b, offset = 0 },
+    { address = 0x2211617, offset = 0 },
+    { address = 0x2211d9d, offset = 2 },
+    { address = 0x2211da9, offset = 2 },
+    { address = 0x2219701, offset = 2 },
+    { address = 0x221970d, offset = 2 },
+    { address = 0x2220a0e, offset = -1 },
+    { address = 0x2220a1f, offset = 0 },
+    { address = 0x22209ce, offset = -1 },
+    { address = 0x2230f9c, offset = 1 },
+    { address = 0x2230fa8, offset = 1 },
+    { address = 0x24d104a, offset = 3 },
+    { address = 0x24d1056, offset = -1 },
+    { address = 0x27ed832, offset = 3 },
+    { address = 0x27ed83e, offset = -1 },
+    { address = 0x284af67, offset = 0 },
+    { address = 0x284af73, offset = 0 },
+    { address = 0x29b5be8, offset = 1 },
+    { address = 0x29b5bf4, offset = 1 },
+    { address = 0x29be75f, offset = 0 },
+    { address = 0x29be76b, offset = 0 },
+    { address = 0x29bf611, offset = 3 },
+    { address = 0x29bf998, offset = 2 },
+    { address = 0x2a32596, offset = -1 },
+    { address = 0x2a325a2, offset = 3 },
+    { address = 0x2b8623e, offset = 0 },
+    { address = 0x2cc698f, offset = 0 },
+    { address = 0x2cc699b, offset = 0 },
 }
 
 local ai_address_mapping = {
-    -- AI Army Size
-    ai_army_size    = { address = 0x22209E0, offset = 0 },
+    ai_army_size = { address = 0x22209df, offset = 0 },
 }
-
 function set_addresses()
     local base = mr.base -- ex: 0x0000000140000000
     local size = settings.army_size
