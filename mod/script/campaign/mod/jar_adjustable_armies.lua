@@ -43,12 +43,12 @@ end
 ------------- [Army Size] -------------
 local address_mapping = {
     -- { address = 0x1ed719e, offset = 1 },
-    { address = 0x1ed37f3, offset = -1 }
+    { address = 0x239f937, offset = -1 }
 }
 
 local ai_address_mapping = {
-    -- ai_army_size = { address = 0x1ed71af, offset = 0 },
-    ai_army_size = { address = 0x1ed3804, offset = 0 },
+    -- ai_army_size = { address = 0x239f937, offset = 0 },
+    ai_army_size = { address = 0x239f948, offset = 0 },
 }
 function set_addresses()
     local base = mr.base -- ex: 0x0000000140000000
