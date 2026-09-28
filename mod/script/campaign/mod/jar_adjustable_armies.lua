@@ -38,17 +38,18 @@ end
 -- 10260 -> -1
 -- 2621460 -> -2
 -- 0 -> 1 or 2
--- REMEMBER TO USE 4 BYTES TYPE IN CE TO FIND OFFSETS
 
 ------------- [Army Size] -------------
 local address_mapping = {
     -- { address = 0x1ed719e, offset = 1 },
-    { address = 0x239c6bf, offset = -1 }
+    -- { address = 0x239c6bf, offset = -1 }
+    { address = 0x248228B, offset = -1 }
 }
 
 local ai_address_mapping = {
     -- ai_army_size = { address = 0x239f937, offset = 0 },
-    ai_army_size = { address = 0x239c6d0, offset = 0 },
+    -- ai_army_size = { address = 0x239c6d0, offset = 0 },
+    ai_army_size = { address = 0x248229c, offset = 0 },
 }
 function set_addresses()
     local base = mr.base -- ex: 0x0000000140000000
@@ -57,7 +58,7 @@ function set_addresses()
         Log(string.format("Updating %s (0x%x %d) to %d", name, addr.address, addr.offset, size))
         mr.write(mr.add(base, addr.address), addr.offset, mr.uint32(size))
     end
-    
+
     local ai_size = settings.ai_army_size
     for name, addr in pairs(ai_address_mapping) do
         Log(string.format("Updating %s (0x%x %d) to %d", name, addr.address, addr.offset, size))
