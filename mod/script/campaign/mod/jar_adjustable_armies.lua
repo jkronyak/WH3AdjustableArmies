@@ -38,54 +38,18 @@ end
 -- 10260 -> -1
 -- 2621460 -> -2
 -- 0 -> 1 or 2
+-- REMEMBER TO USE 4 BYTES TYPE IN CE TO FIND OFFSETS
 
 ------------- [Army Size] -------------
 local address_mapping = {
-
-    -- UI
-    player_limit            = { address = 0x221488F, offset = -1 },
-
-    exchange_panel_1        = { address = 0x1B44194, offset = 0 },
-    exchange_panel_2        = { address = 0x1B441A5, offset = 1 },
-    exchange_panel_3        = { address = 0x2205CAE, offset = -2 },
-    exchange_panel_4        = { address = 0x2205CBA, offset = 2 },
-
-    hero_embedding_1        = { address = 0x220551C, offset = 0 },
-    hero_embedding_2        = { address = 0x2205528, offset = 0 },
-
-    -- Savegame
-    savegame_loading_1      = { address = 0x220D602, offset = 2 },
-    savegame_loading_2      = { address = 0x220D60E, offset = -2 },
-    savegame_loading_3      = { address = 0x282B453, offset = -1 },
-    savegame_loading_4      = { address = 0x282B45F, offset = -1 },
-
-    -- Recruit
-    recruit_chaos_realms    = { address = 0x29B2EEA, offset = 2 },
-
-    recruit_immortal_1      = { address = 0x29B2B63, offset = -1 },
-    recruit_immortal_2      = { address = 0x29A9139, offset = 1 },
-    recruit_immortal_3      = { address = 0x29A9145, offset = 1 },
-
-    -- TBD
-    tbd_1                = { address = 0x2224E6D, offset = 1 },
-    tbd_2                = { address = 0x2224E79, offset = 1 },
-    tbd_3                = { address = 0x24C51AB, offset = -1 },
-    tbd_4                = { address = 0x24C51B7, offset = -1 },
-    tbd_5                = { address = 0x27E6288, offset = 0 },
-    tbd_6                = { address = 0x27E6294, offset = 0 },
-    tbd_7                = { address = 0x29B1CB0, offset = 0 },
-    tbd_8                = { address = 0x29B1CBC, offset = 0 },
-    tbd_9                = { address = 0x2A25A77, offset = -1 },
-    tbd_10               = { address = 0x2A25A83, offset = -1 },
-    tbd_11               = { address = 0x22148E0, offset = 0 },
-    tbd_12               = { address = 0x22148CF, offset = -1 },
+    -- { address = 0x1ed719e, offset = 1 },
+    { address = 0x239c6bf, offset = -1 }
 }
 
 local ai_address_mapping = {
-    -- UI / Player limits
-    ai_limit                = { address = 0x22148A0, offset = 0 },
+    -- ai_army_size = { address = 0x239f937, offset = 0 },
+    ai_army_size = { address = 0x239c6d0, offset = 0 },
 }
-
 function set_addresses()
     local base = mr.base -- ex: 0x0000000140000000
     local size = settings.army_size
