@@ -1,0 +1,28 @@
+key	max_per_army	audio_recruit_vo
+#recruitment_sources_tables;1;db/recruitment_sources_tables/!!!!!jar_army_size_adjustable		
+blessed_spawning	40	
+daemonic_summoning_belakor	40	
+dlc27_monstrous_arcanum	40	
+faction_recruitment	40	
+flesh_lab	40	
+horde_recruitment	40	
+hostile_foreign_slot_recruitment	40	
+imperial_supply	40	
+imrik_dragon_units	40	
+mercenary_recruitment	40	
+monster_pen	40	
+nurgle_buildings	40	
+province_recruitment	40	
+raise_dead	40	
+sea_region_recruitment	40	
+setrapy	40	
+wh3_dlc27_nor_treacheries	40	
+wh3_dlc27_sla_daemonic_attraction	40	campaign_vo_sla_daemonic_attraction_recruit
+wh3_dlc29_emp_warband	40	
+wh3_dlc29_nag_raise_dead_cst_faction_pool	40	
+wh3_dlc29_nag_raise_dead_tmb_faction_pool	40	
+wh3_dlc29_nag_raise_dead_vmp_faction_pool	40	
+wh3_dlc29_vmp_additional_units	40	
+wh3_dlc29_vmp_raise_dead_faction	40	
+wh3_dlc29_vmp_raise_dead_province	40	
+wh_dlc04_vmp_units_of_renown_pool	40	
