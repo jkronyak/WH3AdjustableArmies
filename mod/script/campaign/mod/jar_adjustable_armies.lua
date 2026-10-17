@@ -45,7 +45,8 @@ local address_mapping = {
     -- { address = 0x239c6bf, offset = -1 }
 --     { address = 0x248228B, offset = -1 }
 --     { address = 0x247F89F, offset = -1 }
-    { address = 0x247C4BB, offset = -1 }
+    -- { address = 0x247C4BB, offset = -1 }
+    { address = 0x24809CF, offset = -1 }
 
 }
 
@@ -54,7 +55,9 @@ local ai_address_mapping = {
     -- ai_army_size = { address = 0x239c6d0, offset = 0 },
 --     ai_army_size = { address = 0x248229c, offset = 0 },
 --     { address = 0x247F8B0, offset = 0 }
-    ai_army_size = { address = 0x247C4CC, offset = 0 },
+    -- ai_army_size = { address = 0x247C4CC, offset = 0 },
+    ai_army_size = { address = 0x24809E0, offset = 0 },
+
 
 }
 function set_addresses()
